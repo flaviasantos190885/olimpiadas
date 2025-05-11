@@ -19,65 +19,72 @@ server = app.server
 
 # ====================
 # Layout
+# ====================
 app.layout = html.Div(
     style={'backgroundColor': '#111111', 'color': 'white', 'fontFamily': 'Roboto, sans-serif', 'padding': '20px'},
     children=[
         html.H1("Dashboard de Medalhas Olímpicas - 1992 a 2020", style={'textAlign': 'center'}),
 
         html.Div([
-            html.H3("Gráfico de Pizza - Medalhas por País"),
-            html.Label("Selecione o país:"),
-            dcc.Dropdown(
-                id='country-dropdown',
-                options=[{'label': c, 'value': c} for c in sorted(df['Country_Name'].unique())],
-                value='United States of America',
-                style={'color': 'black'}
-            ),
-            dcc.Graph(id='pie-chart')
-        ], style={'margin-bottom': '50px'}),
+            # Gráfico de Pizza
+            html.Div([
+                html.H3("Gráfico de Pizza - Medalhas por País"),
+                html.Label("Selecione o país:"),
+                dcc.Dropdown(
+                    id='country-dropdown',
+                    options=[{'label': c, 'value': c} for c in sorted(df['Country_Name'].unique())],
+                    value='United States of America',
+                    style={'color': 'black'}
+                ),
+                dcc.Graph(id='pie-chart')
+            ], style={'width': '33.33%', 'padding': '10px'}),
 
-        html.Div([
-            html.H3("Gráfico de Área - Evolução por Medalhas"),
-            html.Label("Tipo de medalha:"),
-            dcc.RadioItems(
-                id='area-medal-filter',
-                options=[
-                    {'label': 'Todos', 'value': 'All'},
-                    {'label': 'Ouro', 'value': 'Gold'},
-                    {'label': 'Prata', 'value': 'Silver'},
-                    {'label': 'Bronze', 'value': 'Bronze'}
-                ],
-                value='All',
-                labelStyle={'display': 'inline-block', 'margin-right': '10px'}
-            ),
-            dcc.Graph(id='area-chart')
-        ], style={'margin-bottom': '50px'}),
+            # Gráfico de Área
+            html.Div([
+                html.H3("Gráfico de Área - Evolução por Medalhas"),
+                html.Label("Tipo de medalha:"),
+                dcc.RadioItems(
+                    id='area-medal-filter',
+                    options=[
+                        {'label': 'Todos', 'value': 'All'},
+                        {'label': 'Ouro', 'value': 'Gold'},
+                        {'label': 'Prata', 'value': 'Silver'},
+                        {'label': 'Bronze', 'value': 'Bronze'}
+                    ],
+                    value='All',
+                    labelStyle={'display': 'inline-block', 'margin-right': '10px'}
+                ),
+                dcc.Graph(id='area-chart')
+            ], style={'width': '33.33%', 'padding': '10px'}),
 
-        html.Div([
-            html.H3("Gráfico de Barra - Top Países em um Ano"),
-            html.Label("Ano Olímpico (País sede):"),
-            dcc.Dropdown(
-                id='year-dropdown',
-                options=[{'label': str(y), 'value': y} for y in sorted(df['Year'].unique())],
-                value=2016,
-                style={'color': 'black'}
-            ),
-            html.Label("Tipo de medalha:"),
-            dcc.RadioItems(
-                id='bar-medal-filter',
-                options=[
-                    {'label': 'Todos', 'value': 'All'},
-                    {'label': 'Ouro', 'value': 'Gold'},
-                    {'label': 'Prata', 'value': 'Silver'},
-                    {'label': 'Bronze', 'value': 'Bronze'}
-                ],
-                value='All',
-                labelStyle={'display': 'inline-block', 'margin-right': '10px'}
-            ),
-            dcc.Graph(id='bar-chart')
-        ])
+            # Gráfico de Barra
+            html.Div([
+                html.H3("Gráfico de Barra - Top Países em um Ano"),
+                html.Label("Ano Olímpico (País sede):"),
+                dcc.Dropdown(
+                    id='year-dropdown',
+                    options=[{'label': str(y), 'value': y} for y in sorted(df['Year'].unique())],
+                    value=2016,
+                    style={'color': 'black'}
+                ),
+                html.Label("Tipo de medalha:"),
+                dcc.RadioItems(
+                    id='bar-medal-filter',
+                    options=[
+                        {'label': 'Todos', 'value': 'All'},
+                        {'label': 'Ouro', 'value': 'Gold'},
+                        {'label': 'Prata', 'value': 'Silver'},
+                        {'label': 'Bronze', 'value': 'Bronze'}
+                    ],
+                    value='All',
+                    labelStyle={'display': 'inline-block', 'margin-right': '10px'}
+                ),
+                dcc.Graph(id='bar-chart')
+            ], style={'width': '33.33%', 'padding': '10px'})
+        ], style={'display': 'flex', 'flexWrap': 'wrap'})
     ]
 )
+
 
 
 
