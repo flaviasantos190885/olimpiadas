@@ -31,6 +31,9 @@ df['Total_Medals'] = df['Gold'] + df['Silver'] + df['Bronze']
 # ====================
 app = dash.Dash(__name__)
 
+
+server = app.server
+
 # ====================
 # Layout com filtros aplicados a cada gráfico
 # ====================
@@ -181,5 +184,5 @@ def update_bar_chart(selected_year, medal_filter):
 # ====================
 # Execução do app
 # ====================
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    app.run_server(debug=True)
