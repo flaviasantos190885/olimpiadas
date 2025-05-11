@@ -84,11 +84,18 @@ app.layout = html.Div([
 )
 def update_pie_chart(selected_country):
     country_data = df[df['Country_Name'] == selected_country]
-    return px.pie(
+    fig = px.pie(
         names=['Ouro', 'Prata', 'Bronze'],
         values=[country_data['Gold'].sum(), country_data['Silver'].sum(), country_data['Bronze'].sum()],
-        title=f'Medalhas de {selected_country}'
+        title=f'Medalhas de {selected_country}',
+        color_discrete_sequence=['#FFD700', '#C0C0C0', '#CD7F32']
     )
+    fig.update_traces(textposition='inside', textinfo='percent+label')
+    fig.update_layout(
+        template='plotly_dark',
+        title_x=0.5
+    )
+    return fig
 
 @app.callback(
     Output('area-chart', 'figure'),
@@ -105,13 +112,16 @@ def update_area_chart(medal_filter):
     df_top = df_area[df_area['Country_Name'].isin(top_countries)]
     df_top_grouped = df_top.groupby(['Country_Name', 'Year'])['Value'].sum().reset_index()
 
-    return px.area(
+    fig = px.area(
         df_top_grouped,
         x='Year',
         y='Value',
         color='Country_Name',
-        title=f'Top 10 países por medalhas ({medal_filter if medal_filter != "All" else "Todas"})'
+        title=f'Top 10 países por medalhas ({medal_filter if medal_filter != "All" else "Todas"})',
+        template='plotly_dark'
     )
+    fig.update_layout(title_x=0.5)
+    return fig
 
 @app.callback(
     Output('bar-chart', 'figure'),
@@ -124,17 +134,19 @@ def update_bar_chart(selected_year, medal_filter):
 
     top_countries = df_year.groupby('Country_Name')['Value'].sum().nlargest(10).reset_index()
 
-    return px.bar(
+    fig = px.bar(
         top_countries,
         x='Country_Name',
         y='Value',
         color='Value',
-        color_continuous_scale='Blues',
-        title=f'Top 10 países em {selected_year} por medalhas ({medal_filter if medal_filter != "All" else "Todas"})'
+        color_continuous_scale='Aggrnyl',
+        title=f'Top 10 países em {selected_year} por medalhas ({medal_filter if medal_filter != "All" else "Todas"})',
+        template='plotly_dark'
     )
-
+    fig.update_layout(title_x=0.5)
+    return fig
 # ====================
 # Execução local (ignorado no Render/Heroku)
 # ====================
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run(debug=True)
