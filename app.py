@@ -37,7 +37,7 @@ app.layout = html.Div(
                     style={'color': 'black'}
                 ),
                 dcc.Graph(id='pie-chart')
-            ], style={'width': '33.33%', 'padding': '10px'}),
+            ], style={'width': '30%', 'padding': '10px'}),
 
             # Gráfico de Área
             html.Div([
@@ -55,7 +55,7 @@ app.layout = html.Div(
                     labelStyle={'display': 'inline-block', 'margin-right': '10px'}
                 ),
                 dcc.Graph(id='area-chart')
-            ], style={'width': '33.33%', 'padding': '10px'}),
+            ], style={'width': '30%', 'padding': '10px'}),
 
             # Gráfico de Barra
             html.Div([
@@ -80,7 +80,7 @@ app.layout = html.Div(
                     labelStyle={'display': 'inline-block', 'margin-right': '10px'}
                 ),
                 dcc.Graph(id='bar-chart')
-            ], style={'width': '33.33%', 'padding': '10px'})
+            ], style={'width': '30%', 'padding': '10px'})
         ], style={'display': 'flex', 'flexWrap': 'wrap'})
     ]
 )
