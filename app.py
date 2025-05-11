@@ -15,65 +15,71 @@ df['Total_Medals'] = df['Gold'] + df['Silver'] + df['Bronze']
 # Inicialização do app
 # ====================
 app = dash.Dash(__name__)
-server = app.server  # Para uso com Gunicorn
+server = app.server  
 
 # ====================
 # Layout
-# ====================
-app.layout = html.Div([
-    html.H1("Dashboard de Medalhas Olímpicas - 1992 a 2020"),
+app.layout = html.Div(
+    style={'backgroundColor': '#111111', 'color': 'white', 'fontFamily': 'Roboto, sans-serif', 'padding': '20px'},
+    children=[
+        html.H1("Dashboard de Medalhas Olímpicas - 1992 a 2020", style={'textAlign': 'center'}),
 
-    html.Div([
-        html.H3("Gráfico de Pizza - Medalhas por País"),
-        html.Label("Selecione o país:"),
-        dcc.Dropdown(
-            id='country-dropdown',
-            options=[{'label': c, 'value': c} for c in sorted(df['Country_Name'].unique())],
-            value='United States of America'
-        ),
-        dcc.Graph(id='pie-chart')
-    ], style={'margin-bottom': '50px'}),
+        html.Div([
+            html.H3("Gráfico de Pizza - Medalhas por País"),
+            html.Label("Selecione o país:"),
+            dcc.Dropdown(
+                id='country-dropdown',
+                options=[{'label': c, 'value': c} for c in sorted(df['Country_Name'].unique())],
+                value='United States of America',
+                style={'color': 'black'}
+            ),
+            dcc.Graph(id='pie-chart')
+        ], style={'margin-bottom': '50px'}),
 
-    html.Div([
-        html.H3("Gráfico de Área - Evolução por Medalhas"),
-        html.Label("Tipo de medalha:"),
-        dcc.RadioItems(
-            id='area-medal-filter',
-            options=[
-                {'label': 'Todos', 'value': 'All'},
-                {'label': 'Ouro', 'value': 'Gold'},
-                {'label': 'Prata', 'value': 'Silver'},
-                {'label': 'Bronze', 'value': 'Bronze'}
-            ],
-            value='All',
-            labelStyle={'display': 'inline-block', 'margin-right': '10px'}
-        ),
-        dcc.Graph(id='area-chart')
-    ], style={'margin-bottom': '50px'}),
+        html.Div([
+            html.H3("Gráfico de Área - Evolução por Medalhas"),
+            html.Label("Tipo de medalha:"),
+            dcc.RadioItems(
+                id='area-medal-filter',
+                options=[
+                    {'label': 'Todos', 'value': 'All'},
+                    {'label': 'Ouro', 'value': 'Gold'},
+                    {'label': 'Prata', 'value': 'Silver'},
+                    {'label': 'Bronze', 'value': 'Bronze'}
+                ],
+                value='All',
+                labelStyle={'display': 'inline-block', 'margin-right': '10px'}
+            ),
+            dcc.Graph(id='area-chart')
+        ], style={'margin-bottom': '50px'}),
 
-    html.Div([
-        html.H3("Gráfico de Barra - Top Países em um Ano"),
-        html.Label("Ano Olímpico (País sede):"),
-        dcc.Dropdown(
-            id='year-dropdown',
-            options=[{'label': str(y), 'value': y} for y in sorted(df['Year'].unique())],
-            value=2016
-        ),
-        html.Label("Tipo de medalha:"),
-        dcc.RadioItems(
-            id='bar-medal-filter',
-            options=[
-                {'label': 'Todos', 'value': 'All'},
-                {'label': 'Ouro', 'value': 'Gold'},
-                {'label': 'Prata', 'value': 'Silver'},
-                {'label': 'Bronze', 'value': 'Bronze'}
-            ],
-            value='All',
-            labelStyle={'display': 'inline-block', 'margin-right': '10px'}
-        ),
-        dcc.Graph(id='bar-chart')
-    ])
-])
+        html.Div([
+            html.H3("Gráfico de Barra - Top Países em um Ano"),
+            html.Label("Ano Olímpico (País sede):"),
+            dcc.Dropdown(
+                id='year-dropdown',
+                options=[{'label': str(y), 'value': y} for y in sorted(df['Year'].unique())],
+                value=2016,
+                style={'color': 'black'}
+            ),
+            html.Label("Tipo de medalha:"),
+            dcc.RadioItems(
+                id='bar-medal-filter',
+                options=[
+                    {'label': 'Todos', 'value': 'All'},
+                    {'label': 'Ouro', 'value': 'Gold'},
+                    {'label': 'Prata', 'value': 'Silver'},
+                    {'label': 'Bronze', 'value': 'Bronze'}
+                ],
+                value='All',
+                labelStyle={'display': 'inline-block', 'margin-right': '10px'}
+            ),
+            dcc.Graph(id='bar-chart')
+        ])
+    ]
+)
+
+
 
 # ====================
 # Callbacks
@@ -88,15 +94,14 @@ def update_pie_chart(selected_country):
         names=['Ouro', 'Prata', 'Bronze'],
         values=[country_data['Gold'].sum(), country_data['Silver'].sum(), country_data['Bronze'].sum()],
         title=f'Medalhas de {selected_country}',
-        color_discrete_sequence=['#FFD700', '#C0C0C0', '#CD7F32']
+        color_discrete_sequence=['gold', 'silver', '#cd7f32']  # Bronze
     )
-    fig.update_traces(textposition='inside', textinfo='percent+label')
     fig.update_layout(
-        template='plotly_dark',
-        title_x=0.5
+        paper_bgcolor='#111111',
+        plot_bgcolor='#111111',
+        font_color='white'
     )
     return fig
-
 @app.callback(
     Output('area-chart', 'figure'),
     Input('area-medal-filter', 'value')
@@ -117,12 +122,14 @@ def update_area_chart(medal_filter):
         x='Year',
         y='Value',
         color='Country_Name',
-        title=f'Top 10 países por medalhas ({medal_filter if medal_filter != "All" else "Todas"})',
-        template='plotly_dark'
+        title=f'Top 10 países por medalhas ({medal_filter if medal_filter != "All" else "Todas"})'
     )
-    fig.update_layout(title_x=0.5)
+    fig.update_layout(
+        paper_bgcolor='#111111',
+        plot_bgcolor='#111111',
+        font_color='white'
+    )
     return fig
-
 @app.callback(
     Output('bar-chart', 'figure'),
     Input('year-dropdown', 'value'),
@@ -139,14 +146,12 @@ def update_bar_chart(selected_year, medal_filter):
         x='Country_Name',
         y='Value',
         color='Value',
-        color_continuous_scale='Aggrnyl',
-        title=f'Top 10 países em {selected_year} por medalhas ({medal_filter if medal_filter != "All" else "Todas"})',
-        template='plotly_dark'
+        color_continuous_scale='cividis',
+        title=f'Top 10 países em {selected_year} por medalhas ({medal_filter if medal_filter != "All" else "Todas"})'
     )
-    fig.update_layout(title_x=0.5)
+    fig.update_layout(
+        paper_bgcolor='#111111',
+        plot_bgcolor='#111111',
+        font_color='white'
+    )
     return fig
-# ====================
-# Execução local (ignorado no Render/Heroku)
-# ====================
-if __name__ == "__main__":
-    app.run(debug=True)
