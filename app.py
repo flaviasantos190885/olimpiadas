@@ -7,11 +7,11 @@ Original file is located at
     https://colab.research.google.com/drive/1EWiCJ1bQvLQaq5AIwNJYmXMKeVvzrD6r
 """
 
-!pip Install pandas
-!pip install plotly
-!pip install dash
-!pip install dash_core_components
-!pip install dash_html_components
+#!pip Install pandas
+#!pip install plotly
+#!pip install dash
+#!pip install dash_core_components
+#!pip install dash_html_components
 
 import pandas as pd
 import plotly.express as px
